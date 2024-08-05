@@ -1,0 +1,46 @@
+GET http://localhost:3000/
+
+### 
+GET http://localhost:3000/songs/?page=1&limit=2
+
+###
+GET http://localhost:3000/songs
+
+###
+
+    POST http://localhost:3000/songs
+    Content-Type: application/json
+
+    {   
+        "title":"lasting lover 5",
+        "artists":["sigla", "Martin"],
+        "releasedDate": "2022-03-22",
+        "duration":"02:35"
+    }
+
+###
+
+    PUT http://localhost:3000/songs/2
+    Content-Type: application/json
+    
+    {
+        "title": "lasting updated"
+    }
+###
+DELETE http://localhost:3000/songs/3
+
+###
+
+POST http://localhost:3000/playlists
+Content-Type: application/json
+
+{
+    "name":"playlist firsttt",
+    "songs":[6],
+    "user": 1
+}
+
+###
+
+GET http://localhost:3000/profile
+Authorization: Bearer asdiadoijasidjaidjaiodjoaisdjasiodj
