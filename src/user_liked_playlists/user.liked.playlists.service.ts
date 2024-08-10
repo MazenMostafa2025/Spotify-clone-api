@@ -14,7 +14,7 @@ export class userLikedPlaylistsService {
     private userLikesPlayListRepository: Repository<UserLikePlaylist>,
   ) {}
 
-  async likePlaylist(playlist_id: number, user_id: number) {
+  async likeOrUnlikePlaylist(playlist_id: number, user_id: number) {
     const user = await this.usersService.findById(user_id);
     const playlist = await this.playlistsService.findPlaylistById(playlist_id);
     const data = await this.userLikesPlayListRepository.findOne({
