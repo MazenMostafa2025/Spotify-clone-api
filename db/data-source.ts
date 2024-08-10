@@ -8,6 +8,8 @@ import { Playlist } from 'src/playlists/playlist.entity';
 import { Song } from 'src/songs/song.entity';
 import { User } from 'src/users/user.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+// require('dotenv').config();
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   imports: [ConfigModule],
@@ -29,6 +31,9 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
     };
   },
 };
+// console.log(process.env.NODE_ENV);
+// console.log(process.env.DB_HOST);
+// console.log(process.env.PASSWORD);
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',

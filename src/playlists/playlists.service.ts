@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Playlist } from './playlist.entity';
 import { In, Repository } from 'typeorm';
@@ -27,5 +27,10 @@ export class PlaylistsService {
     const user = await this.userRepository.findOneBy({ id: playlistDTO.user });
     playlist.user = user;
     return await this.playListRepository.save(playlist);
+  }
+  async findPlaylistById(id: number): Promise<Playlist> {
+    const playlist = await this.playListRepository.findOneBy({ id });
+    if (!playlist) throw new HttpException('Playlist not found', 404);
+    return playlist;
   }
 }

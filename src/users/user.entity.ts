@@ -1,6 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { Playlist } from 'src/playlists/playlist.entity';
+import { UserLikePlaylist } from 'src/user_liked_playlists/user-liked-playlists-entity';
+import { UserLikeSong } from 'src/user_liked_songs/user-liked-songs-entity';
+import { UserFollowing } from 'src/users_following/user-following.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
@@ -48,4 +51,19 @@ export class User {
 
   @OneToMany(() => Playlist, (playlist) => playlist.user)
   playLists: Playlist[];
+
+  @OneToMany(() => UserFollowing, (userFollowing) => userFollowing.follower)
+  following: UserFollowing[];
+
+  @OneToMany(() => UserFollowing, (userFollowing) => userFollowing.following)
+  followers: UserFollowing[];
+
+  @OneToMany(() => UserLikeSong, (userLikeSong) => userLikeSong.user)
+  LikedSongs: UserLikeSong[];
+
+  @OneToMany(
+    () => UserLikePlaylist,
+    (userLikePlaylist) => userLikePlaylist.user,
+  )
+  likedPlaylists: UserLikePlaylist[];
 }

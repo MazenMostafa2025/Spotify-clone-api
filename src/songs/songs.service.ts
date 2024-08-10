@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, In, Repository, UpdateResult } from 'typeorm';
 import { Song } from './song.entity';
@@ -40,7 +40,9 @@ export class SongsService {
     return paginate<Song>(queryBuilder, options);
   }
   async findOne(id: number): Promise<Song> {
-    return await this.songsRepository.findOneBy({ id });
+    const song = await this.songsRepository.findOneBy({ id });
+    if (!song) throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    return song;
   }
   async update(
     id: number,

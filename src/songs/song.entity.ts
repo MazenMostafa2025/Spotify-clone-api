@@ -1,12 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Artist } from 'src/artists/artist.entity';
 import { Playlist } from 'src/playlists/playlist.entity';
+import { UserLikeSong } from 'src/user_liked_songs/user-liked-songs-entity';
 import {
   Column,
   Entity,
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -43,10 +45,20 @@ export class Song {
   @Column({ type: 'text', nullable: true })
   lyrics: string;
 
+  @Column({ type: 'text' })
+  audio_file: string;
+
   @ManyToOne(() => Playlist, (playList) => playList.songs)
   playList: Playlist;
 
   @ManyToMany(() => Artist, (artist) => artist.songs, { cascade: true })
   @JoinTable({ name: 'songs_artists' })
   artists: Artist[];
+
+  @ManyToMany(() => Playlist, (playlist) => playlist.songs, { cascade: true })
+  @JoinTable({ name: 'songs_playlists' })
+  playlists: Playlist[];
+
+  @OneToMany(() => UserLikeSong, (userLikeSong) => userLikeSong.song)
+  likedByUsers: UserLikeSong[];
 }

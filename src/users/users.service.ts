@@ -30,7 +30,9 @@ export class UsersService {
     return user;
   }
   async findById(id: number): Promise<User> {
-    return await this.userRepository.findOneBy({ id });
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) throw new UnauthorizedException('Could not find user');
+    return user;
   }
   async updateSecretKey(userId, secret: string): Promise<UpdateResult> {
     return this.userRepository.update(
@@ -49,5 +51,12 @@ export class UsersService {
   }
   async findByApiKey(apiKey: string): Promise<User> {
     return await this.userRepository.findOneBy({ apiKey });
+  }
+  async updatePassword(user: User): Promise<void> {
+    // implement a query to update password by user id
+    await this.userRepository.update(
+      { id: user.id },
+      { password: user.password },
+    );
   }
 }

@@ -14,6 +14,7 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-guard';
 import { Enable2FAType } from './types';
 import { ValidateTokenDTO } from './dto/validate-token-dto';
+import { ChangePasswordDTO } from './dto/change-password-dto';
 import { UpdateResult } from 'typeorm';
 import { AuthGuard } from '@nestjs/passport';
 import {
@@ -100,5 +101,18 @@ export class AuthController {
       msg: 'authenticated with api key',
       user: req.user,
     };
+  }
+
+  @Post('ChangePassword')
+  @UseGuards(AuthGuard('bearer'))
+  changePassword(
+    @Body() changePasswordDTO: ChangePasswordDTO,
+    @Request() req,
+  ): any {
+    return this.authService.changePassword(
+      req.user.userId,
+      changePasswordDTO.oldPassword,
+      changePasswordDTO.newPassword,
+    );
   }
 }

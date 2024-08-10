@@ -1,9 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Song } from 'src/songs/song.entity';
+import { UserLikePlaylist } from 'src/user_liked_playlists/user-liked-playlists-entity';
 import { User } from 'src/users/user.entity';
 import {
   Column,
   Entity,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -21,9 +23,12 @@ export class Playlist {
   @Column()
   name: string;
 
-  @OneToMany(() => Song, (song) => song.playList)
-  songs: Song[];
-
   @ManyToOne(() => User, (user) => user.playLists)
   user: User;
+
+  @ManyToMany(() => Song, (song) => song.artists)
+  songs: Song[];
+
+  @OneToMany(() => UserLikePlaylist, (user_playlist) => user_playlist.playlist)
+  likedByUsers: UserLikePlaylist[];
 }

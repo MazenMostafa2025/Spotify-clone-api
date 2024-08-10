@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcryptjs';
 import { LoginDTO } from './dto/login-dto';
@@ -83,5 +87,18 @@ export class AuthService {
   }
   async validateUserByApiKey(apiKey: string): Promise<User> {
     return this.usersService.findByApiKey(apiKey);
+  }
+  async changePassword(
+    userId: number,
+    oldPassword: string,
+    newPassword: string,
+  ): Promise<void> {
+    const user = await this.usersService.findById(userId);
+    if (!user) throw new NotFoundException('User not found..');
+    const passwordMatched = await bcrypt.compare(oldPassword, user.password);
+    if (!passwordMatched) throw new UnauthorizedException('Wrong credentials');
+    const salt = await bcrypt.genSalt();
+    user.password = await bcrypt.hash(newPassword, salt);
+    await this.usersService.updatePassword(user);
   }
 }
